@@ -1,6 +1,0 @@
-Relation Type,Count,Description
-INTERACTED,202546,User interacted with item
-HAS_GENRE,5391,Item belongs to genre
-CO_WATCHED,20000,Items watched together in sessions
-GENRE_SIMILAR,6713,Items share multiple genres
-TEMPORAL_NEXT,202546,Item watched after another temporally
