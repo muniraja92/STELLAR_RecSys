@@ -1,6 +1,0 @@
-Component,Full Name,Key Innovation,Novelty
-SGW,Spectral Graph Wavelets,Multi-resolution graph analysis using wavelet transforms in spectral domain,First application of graph wavelets to KG-enhanced recommendations
-PCL,Prototypical Contrastive Learning,Prototype-guided representation learning with contrastive objectives,Novel combination of prototype learning with recommendation systems
-CIR,Causal Invariant Routing,Popularity debiasing through invariant risk minimization and causal intervention,First integration of IRM principles for recommendation debiasing
-TPR,Temporal Positional Reasoning,Rotary position embeddings with temporal decay for sequential modeling,Novel temporal modeling combining rotary embeddings with decay
-HGF,Hierarchical Gated Fusion,Multi-level adaptive fusion with hierarchical gating mechanism,Novel hierarchical structure for score fusion
