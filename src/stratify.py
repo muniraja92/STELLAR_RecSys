@@ -23,10 +23,17 @@ METRIC = 'NDCG@10'
 B = 2000                      # bootstrap resamples
 RNG = np.random.default_rng(2026)
 
-MODELS = ['stellar', 'tpr', 'tpr_nokg', 'stellar_nokg', 'sasrec', 'bsarec', 'bert4rec', 'kgin', 'kgat',
+
+def reseed(*keys):
+    """Independent, reproducible bootstrap stream per analysis, unaffected by which other analyses are run."""
+    import zlib
+    global RNG
+    RNG = np.random.default_rng([2026, zlib.crc32('|'.join(map(str, keys)).encode())])
+
+MODELS = ['stellar', 'tpr', 'tpr_nokg', 'stellar_nokg', 'tpr_tok_sgw_nokg', 'tpr_tok_lightgcn', 'sasrec', 'bsarec', 'bert4rec', 'kgin', 'kgat',
           'lightgcn', 'sgw', 'ease', 'itemknn', 'bpr', 'pop']
 PAIRS = [('stellar', 'sasrec'), ('stellar', 'bsarec'), ('stellar', 'bert4rec'), ('stellar', 'kgin'), ('stellar', 'tpr'),
-         ('tpr', 'tpr_nokg'), ('stellar', 'stellar_nokg')]
+         ('tpr', 'tpr_nokg'), ('stellar', 'stellar_nokg'), ('tpr_tok_sgw_nokg', 'tpr_nokg'), ('tpr_tok_lightgcn', 'tpr_nokg'), ('tpr', 'tpr_tok_sgw_nokg')]
 
 
 def holm(p):
@@ -147,6 +154,7 @@ def main():
         D['best'] = [max((m for m in MODELS if m in X), key=lambda m: X[m][g == k].mean()) for k in range(K)]
         for a, b in PAIRS:
             if a not in X or b not in X: continue
+            reseed(dim, a, b)
             dd = X[a] - X[b]
             rows = []
             for k in range(K):
@@ -177,8 +185,9 @@ def main():
             for dm, q in zip(dims, adj): res['dimensions'][dm]['pairs'][key][fld + '_holm'] = r4(q)
     # ranking stability under a stratified bootstrap over history quintile x target popularity (15 cells)
     cell = S['history'][0] * 3 + S['popularity'][0]
-    cand = [m for m in MODELS if m in X and m not in ('tpr_nokg', 'stellar_nokg')]
+    cand = [m for m in MODELS if m in X and m not in ('tpr_nokg', 'stellar_nokg', 'tpr_tok_sgw_nokg', 'tpr_tok_lightgcn')]
     idx = [np.flatnonzero(cell == c) for c in np.unique(cell)]
+    reseed('stability')
     first = {m: 0 for m in cand}; beat = {b: 0 for b in cand if b != 'stellar'}
     M = np.stack([X[m] for m in cand])
     for _ in range(B):
@@ -193,6 +202,7 @@ def main():
     jw = {}
     for a, b in PAIRS:
         if a in X and b in X:
+            reseed('balanced', a, b)
             dd = X[a] - X[b]; cells = np.unique(cell)
             bt = strat_boot_means(dd, np.searchsorted(cells, cell), len(cells), np.full(len(cells), 1 / len(cells)))
             jw[f'{a}-{b}'] = dict(delta=r4(np.mean([dd[cell == c].mean() for c in cells])),
@@ -204,7 +214,7 @@ def main():
     import statsmodels.formula.api as smf
     kn, po = S['knowledge'][0], S['popularity'][0]
     adj = {}
-    for a, b in [('tpr', 'tpr_nokg'), ('stellar', 'stellar_nokg')]:
+    for a, b in [('tpr', 'tpr_nokg'), ('stellar', 'stellar_nokg'), ('tpr_tok_sgw_nokg', 'tpr_nokg'), ('tpr_tok_lightgcn', 'tpr_nokg'), ('tpr', 'tpr_tok_sgw_nokg')]:
         dd = X[a] - X[b]
         lv = []
         for k in range(3):
