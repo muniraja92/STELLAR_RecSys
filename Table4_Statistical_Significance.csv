@@ -1,6 +1,0 @@
-Comparison,t-statistic,p-value,Cohen's d,95% CI,Significant
-STELLAR vs ItemKNN,3.769,1.68e-04,0.083,"[0.0101, 0.0327]",✓
-STELLAR vs LightGCN,9.842,2.26e-22,0.216,"[0.0577, 0.0873]",✓
-STELLAR vs SGW,11.834,2.57e-31,0.259,"[0.0733, 0.1029]",✓
-STELLAR vs PCL,13.320,6.65e-39,0.292,"[0.0845, 0.1138]",✓
-STELLAR vs TPR,-10.992,2.33e-27,-0.241,"[-0.1208, -0.0851]",✓
