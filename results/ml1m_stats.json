@@ -1,0 +1,25 @@
+{
+ "dataset": "ml1m",
+ "users": 5950,
+ "items": 3125,
+ "interactions": 573726,
+ "train_interactions": 561826,
+ "avg_seq_len": 96.42453781512604,
+ "density": 0.030855852100840336,
+ "kg_triples": 36621,
+ "kg_relations": 10,
+ "kg_entities": 4514,
+ "items_with_kg": 3125,
+ "relation_counts": {
+  "actor": 13625,
+  "country": 1915,
+  "director": 1299,
+  "genre": 4474,
+  "genre(MovieLens)": 5419,
+  "language": 2601,
+  "rating": 1635,
+  "release_decade": 3124,
+  "star": 1100,
+  "writer": 1429
+ }
+}
