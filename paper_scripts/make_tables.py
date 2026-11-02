@@ -11,8 +11,8 @@ NAME = {'pop': 'Popularity', 'itemknn': 'ItemKNN', 'ease': 'EASE', 'bpr': 'BPR-M
         'sgw': 'KG-SGW', 'tpr': 'TPR', 'stellar': 'STELLAR-KG', 'stellar_fixed': 'STELLAR-KG, constant gate',
         'stellar_nokg': 'STELLAR-KG without KG', 'sgw_nokg': 'KG-SGW without KG (bipartite)',
         'sgw_band': 'KG-SGW with band-pass bank', 'sgw_fixrel': r'KG-SGW with $\omega_r=1$',
-        'tpr_nokg': 'TPR without knowledge tokens', 'tpr_nopcl': 'TPR without PCL', 'tpr_nocir': 'TPR without CIR',
-        'tpr_notime': 'TPR without time decay and RoPE', 'tpr_tok_sgw_nokg': 'TPR with bipartite KG-SGW tokens', 'tpr_tok_lightgcn': 'TPR with LightGCN tokens', 'tpr_norope': 'TPR without RoPE', 'tpr_nodecay': 'TPR without time decay'}
+        'tpr_nokg': 'TPR without tokens', 'tpr_nopcl': 'TPR without PCL', 'tpr_nocir': 'TPR without CIR',
+        'tpr_notime': 'TPR without time decay and RoPE', 'tpr_tok_sgw_nokg': 'TPR, bipartite KG-SGW tokens', 'tpr_tok_lightgcn': 'TPR, LightGCN tokens', 'tpr_norope': 'TPR without RoPE', 'tpr_nodecay': 'TPR without time decay'}
 BASE = ['pop', 'itemknn', 'ease', 'bpr', 'lightgcn', 'kgat', 'kgin', 'sasrec', 'bert4rec', 'bsarec']
 OURS = ['sgw', 'tpr', 'stellar']
 
@@ -84,7 +84,7 @@ def ablation_table():
              ('sgw', 'sgw_nokg'), ('sgw', 'sgw_fixrel'), ('sgw', 'sgw_band'), ('sgw', 'lightgcn'),
              ('tpr', 'tpr_nokg'), ('tpr', 'tpr_nopcl'), ('tpr', 'tpr_nocir'), ('tpr', 'tpr_notime'), ('tpr', 'sasrec')]
     L = [r'\begin{table}[!htbp]', r'\centering', r'\footnotesize',
-         r'\caption{Ablations. Each row compares a variant (right) with its parent model (left) on NDCG@10; values are means over seeds 42, 1 and 7, $\Delta$ is the parent minus the variant, and $p$ the Holm-adjusted Wilcoxon $p$-value on per-user NDCG@10 (family of all rows). Differences are computed before rounding.}',
+         r'\caption{Ablations. Each row compares a variant (right) with its parent model (left) on NDCG@10; values are means over seeds 42, 1 and 7, $\Delta$ is the parent minus the variant, and $p$ the Holm-adjusted Wilcoxon $p$-value on per-user NDCG@10 (family of all rows). Differences are computed before rounding. The rows with replaced tokens test whether the gain from the knowledge tokens requires the knowledge graph: with bipartite KG-SGW tokens, TPR uses the item representations of KG-SGW trained without item--entity edges, and with LightGCN tokens those of LightGCN.}',
          r'\label{tab:ablation}', r'\setlength{\tabcolsep}{3pt}', r'\begin{tabular}{ll' + 'ccc' * len(DSA) + '}', r'\toprule',
          'Parent & Variant & ' + ' & '.join(['NDCG@10', r'$\Delta$', '$p$'] * len(DSA)) + r' \\', r'\midrule']
     for a, b in pairs:
@@ -154,9 +154,9 @@ def strat_table():
     dims = [('history', 'History length', 'quintiles'), ('gender', 'Gender', ''), ('age', 'Age', ''),
             ('gap', 'Gap before target', ''), ('period', 'Test period', ''), ('popularity', 'Target popularity', 'tertiles'),
             ('knowledge', 'Target Satori links', '')]
-    pairs = [('stellar-sasrec', 'STELLAR-KG $-$ SASRec'), ('tpr-tpr_nokg', 'TPR $-$ TPR w/o tokens'), ('stellar-tpr', 'STELLAR-KG $-$ TPR')]
+    pairs = [('stellar-sasrec', 'STELLAR-KG $-$ SASRec'), ('tpr-tpr_nokg', 'KG tokens $-$ no tokens'), ('tpr-tpr_tok_sgw_nokg', 'KG $-$ bipartite tokens'), ('stellar-tpr', 'STELLAR-KG $-$ TPR')]
     L = [r'\begin{table*}[!t]', r'\centering', r'\footnotesize',
-         r'\caption{Stratified analysis on MovieLens-1M for three key comparisons (per-user NDCG@10 averaged over seeds). For each stratification, Strata is the number of strata, $+$ the number of strata with a positive mean difference, $\Delta_{\mathrm{bal}}$ the difference in a balanced population in which every stratum has equal weight, with a 95\% stratified-bootstrap interval, $p_{\mathrm{s}}$ the stratified signed-rank test with van Elteren weights and $p_{\mathrm{het}}$ Cochran\textquoteright s $Q$ test of heterogeneity across strata. The stratified tests are alternative tests of the same overall hypothesis and are reported without correction; the heterogeneity tests are Holm-adjusted over the seven stratifications.}',
+         r'\caption{Stratified analysis on MovieLens-1M for four key comparisons; the second and third compare TPR with knowledge-graph tokens against TPR without tokens and against TPR with tokens from KG-SGW on the bipartite graph (per-user NDCG@10 averaged over seeds). For each stratification, Strata is the number of strata, $+$ the number of strata with a positive mean difference, $\Delta_{\mathrm{bal}}$ the difference in a balanced population in which every stratum has equal weight, with a 95\% stratified-bootstrap interval, $p_{\mathrm{s}}$ the stratified signed-rank test with van Elteren weights and $p_{\mathrm{het}}$ Cochran\textquoteright s $Q$ test of heterogeneity across strata. The stratified tests are alternative tests of the same overall hypothesis and are reported without correction; the heterogeneity tests are Holm-adjusted over the seven stratifications.}',
          r'\label{tab:strat}', r'\setlength{\tabcolsep}{3pt}', r'\resizebox{\textwidth}{!}{\begin{tabular}{lc' + 'cccc' * len(pairs) + '}', r'\toprule',
          r'Stratification & Strata & ' + ' & '.join(rf'\multicolumn{{4}}{{c}}{{{n}}}' for _, n in pairs) + r' \\',
          ''.join(rf'\cmidrule(lr){{{3 + 4 * i}-{6 + 4 * i}}}' for i in range(len(pairs))),
