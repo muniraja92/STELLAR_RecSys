@@ -1,0 +1,18 @@
+{
+ "dataset": "toys",
+ "users": 19412,
+ "items": 11924,
+ "interactions": 167597,
+ "train_interactions": 128773,
+ "avg_seq_len": 8.633680197815783,
+ "density": 0.0007240590571801228,
+ "kg_triples": 47640,
+ "kg_relations": 3,
+ "kg_entities": 1029,
+ "items_with_kg": 11859,
+ "relation_counts": {
+  "brand": 9555,
+  "category": 27005,
+  "price_band": 11080
+ }
+}
