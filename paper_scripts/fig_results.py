@@ -65,15 +65,15 @@ DIMS = [('history', 'History length'), ('gender', 'Gender'), ('age', 'Age'), ('g
 def fig_strata():
     """Forest plot: paired NDCG@10 differences with 95% bootstrap intervals in every stratum."""
     S = json.load(open(STRAT))['dimensions']
-    panels = [('stellar-sasrec', '(a) STELLAR-KG $-$ SASRec'), ('tpr-tpr_nokg', '(b) KG tokens $-$ no tokens'),
-              ('tpr-tpr_tok_sgw_nokg', '(c) KG $-$ bipartite tokens'), ('stellar-tpr', '(d) STELLAR-KG $-$ TPR')]
+    panels = [('stellar-sasrec', '(a) STELLAR-KG\n$-$ SASRec'), ('tpr-tpr_nokg', '(b) KG tokens\n$-$ no tokens'),
+              ('tpr-tpr_tok_sgw_nokg', '(c) KG tokens\n$-$ bipartite tokens'), ('stellar-tpr', '(d) STELLAR-KG\n$-$ TPR')]
     labels, ys, y = [], [], 0
     seps = []
     for dim, dn in DIMS:
         for lv in S[dim]['levels']:
             labels.append(f'{dn}: ' + lv.replace('>=', '≥ ').replace('<', '< ').replace('>', '> ')); ys.append(y); y += 1
         seps.append(y - 0.5); y += 0.6
-    fig, ax = plt.subplots(1, 4, figsize=(7.4, 5.0), sharey=True, gridspec_kw={'wspace': 0.1})
+    fig, ax = plt.subplots(1, 4, figsize=(7.4, 6.2), sharey=True, gridspec_kw={'wspace': 0.12})
     for a, (key, title) in zip(ax, panels):
         k = 0
         for dim, dn in DIMS:
@@ -84,9 +84,9 @@ def fig_strata():
                 a.plot([r['delta']], [ys[k]], marker='o', ms=3.8, color=c, mfc=c if sig else 'white', mew=1.0)
                 k += 1
         a.axvline(0, color=style.INK2, lw=0.8, ls=':')
-        a.set_title(title, loc='left', fontsize=7.5); a.tick_params(axis='x', labelsize=6.5); a.set_xlabel(r'$\Delta$ NDCG@10')
+        a.set_title(title, loc='left', fontsize=8.5); a.tick_params(axis='x', labelsize=7.5); a.locator_params(axis='x', nbins=3); a.set_xlabel(r'$\Delta$ NDCG@10')
         a.grid(axis='y', visible=False)
-    ax[0].set_yticks(ys); ax[0].set_yticklabels(labels); ax[0].invert_yaxis()
+    ax[0].set_yticks(ys); ax[0].set_yticklabels(labels, fontsize=8.5); ax[0].invert_yaxis()
     from matplotlib.lines import Line2D
     fig.legend(handles=[Line2D([], [], marker='o', color=style.INK2, mfc=style.INK2, ls='', label=r'$p_{\mathrm{Holm}}<0.05$ within the dimension'),
                         Line2D([], [], marker='o', color=style.INK2, mfc='white', ls='', label='not significant')],

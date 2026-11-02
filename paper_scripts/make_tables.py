@@ -103,7 +103,7 @@ def beyond_table():
     keys = [('ARP@10', 'ARP', '{:.1f}'), ('APLT@10', 'APLT', '{:.3f}'), ('Coverage@10', 'Cov.', '{:.3f}'),
             ('Gini@10', 'Gini', '{:.3f}'), ('NDCG@10_env_low', r'N@10$_{\mathrm{low}}$', '{:.4f}')]
     L = [r'\begin{table}[!htbp]', r'\centering', r'\footnotesize',
-         r'\caption{Popularity and exposure of the top-10 lists (means over seeds): average recommendation popularity (ARP, training interactions per recommended item, lower is less popularity-biased), average share of long-tail items (APLT), catalogue coverage, Gini coefficient of exposure (lower is more even), and NDCG@10 on users whose test item lies in the least popular tertile.}',
+         r'\caption{Popularity and exposure of the top-10 lists (means over seeds): average recommendation popularity (ARP, training interactions per recommended item, lower is less popularity-biased), average share of long-tail items (APLT), catalogue coverage, Gini coefficient of exposure (lower is more even), and NDCG@10 on users whose test item lies in the least popular tertile of items (330 of the 5,950 test users).}',
          r'\label{tab:beyond}', r'\setlength{\tabcolsep}{2.5pt}', r'\begin{tabular}{l' + 'c' * (len(keys) * len(DSA)) + '}', r'\toprule',
          'Model & ' + ' & '.join(h for _ in DSA for _, h, _ in keys) + r' \\', r'\midrule']
     for m in ms:
@@ -119,7 +119,7 @@ def beyond_table():
 def time_table():
     ms = ['ease', 'lightgcn', 'kgat', 'kgin', 'sgw', 'sasrec', 'bert4rec', 'bsarec', 'tpr', 'stellar']
     L = [r'\begin{table}[!htbp]', r'\centering', r'\footnotesize',
-         r'\caption{Training and full-catalogue inference time in minutes (means over seeds), measured on the same machine with two CPU threads per run. Training time includes the periodic validation used for early stopping; for STELLAR-KG both columns cover the fusion step only, on top of the times of its two encoders. The three-hour budget of the self-attentive models applies to training epochs; the reported time also includes validation.}',
+         r'\caption{Training and full-catalogue inference time in minutes (means over seeds, two CPU threads per run), including periodic validation. STELLAR-KG: fusion step only, on top of its two encoders.}',
          r'\label{tab:time}', r'\setlength{\tabcolsep}{4pt}', r'\begin{tabular}{l' + 'cc' * len(DSA) + '}', r'\toprule',
          'Model & ' + ' & '.join(['Train', 'Infer.'] * len(DSA)) + r' \\', r'\midrule']
     for m in ms:
