@@ -3,13 +3,13 @@
 Usage: python driver.py <dataset> [phase]   phase in {tune, final, all}
 Tuning: every model gets a small grid, evaluated on validation NDCG@10 with seed 42 only.
 The selected configuration is stored in results/<dataset>/best_configs.json and then run with
-all five seeds.  Test metrics are never used for selection."""
+all three seeds (42, 1, 7).  Test metrics are never used for selection."""
 import os, sys, json, subprocess, time, shutil
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from common import RES
 
-SEEDS = [42, 1, 7, 123, 2024]
+SEEDS = [42, 1, 7]   # the three seeds of the study
 GRIDS = {
     'pop': [{}],
     'itemknn': [{'k': k} for k in (20, 50, 100, 200, 500)],

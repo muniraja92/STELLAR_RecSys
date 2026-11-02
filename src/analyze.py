@@ -5,7 +5,7 @@ from scipy import stats
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from common import RES, Dataset
 
-SEEDS = [42, 1, 7, 123, 2024]
+SEEDS = [42, 1, 7]   # the three seeds of the study
 OUT = os.path.join(os.path.dirname(RES), 'tables'); os.makedirs(OUT, exist_ok=True)
 
 

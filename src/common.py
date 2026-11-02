@@ -67,7 +67,6 @@ class Dataset:
     def _check_leakage(self):
         for u in range(self.n_users):
             s = self.train[u]
-            assert self.val[u] != self.test[u] or True
             assert self.seqs[u][-1] == self.test[u] and self.seqs[u][-2] == self.val[u]
             assert len(s) == len(self.seqs[u]) - 2
         # training matrix contains no validation/test pairs (ML/Amazon data are de-duplicated)

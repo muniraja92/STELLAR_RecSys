@@ -144,10 +144,8 @@ def download():
             os.makedirs(f'{RAW}/ml1m', exist_ok=True)
             for n in ('ratings.dat', 'movies.dat'):
                 open(f'{RAW}/ml1m/{n}', 'wb').write(z.read(f'ml-1m/{n}'))
-    except Exception as e:
-        print('GroupLens unavailable, using mirror', e)
-        for f in ('movies.csv', 'ratings.csv'):
-            get(f'https://huggingface.co/datasets/hazemessam/ml-1m/resolve/main/{f}', f'{RAW}/ml1m/{f}')
+    except Exception as e:     # MovieLens-1M may only be obtained from GroupLens (licence); no mirror is used
+        raise SystemExit(f'Download MovieLens-1M from https://grouplens.org/datasets/movielens/1m/ into {RAW}/ml1m ({e})')
     rp = 'https://raw.githubusercontent.com/hwwang55/RippleNet/master/data/movie/'
     for f in ('item_index2entity_id_rehashed.txt', 'kg_part1_rehashed.txt', 'kg_part2_rehashed.txt'):
         get(rp + f, f'{RAW}/ripplenet/{f}')

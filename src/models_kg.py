@@ -6,9 +6,11 @@ Operates on the collaborative knowledge graph (CKG) whose nodes are users, items
 Edges: user--item (training interactions, weight 1) and item--entity for every KG triple, weighted by
 a learnable, non-negative relation weight w_r = softplus(theta_r).  With W the weighted adjacency,
 D its degree matrix and A_hat = D^{-1/2} W D^{-1/2}, the normalised Laplacian is L = I - A_hat
-(spectrum in [0, 2]).  A bank of spectral kernels {h, g(s_1 .), ..., g(s_J .)} -- a low-pass scaling
-kernel h(l) = exp(-s_0 l) and band-pass wavelet kernels g(x) = x exp(1 - x) (Hammond et al., 2011) --
-is applied to learnable node embeddings X through an order-K Chebyshev expansion
+(spectrum in [0, 2]).  A bank of spectral kernels is applied: by default (kernels='heatbank', the
+configuration of the paper) the multi-scale heat kernels exp(-s l), s in {1, 2, 4}; the ablation
+kernels='bank' uses the low-pass scaling kernel h(l) = exp(-4 l) with the band-pass wavelets
+g(s l), g(x) = x exp(1 - x) (Hammond et al., 2011), and kernels='lgcn' the fixed three-layer LightGCN
+response (diagnostic).  The kernels are applied to learnable node embeddings X through an order-K Chebyshev expansion
 
     Psi_j X  ~=  sum_{k=0}^{K} c_{j,k} T_k(L - I) X ,
 
@@ -87,7 +89,7 @@ class WeightedAdj(torch.autograd.Function):
 
 class KGSGW(BPRMF):
     def __init__(self, ds, dim=64, K=8, scales=(1.0, 2.0, 4.0), s0=4.0, use_kg=True,
-                 learn_rel=True, kernels='bank', learn_mix=True, **kw):
+                 learn_rel=True, kernels='heatbank', learn_mix=True, **kw):
         nn.Module.__init__(self)
         self.ds, self.dim, self.K, self.use_kg = ds, dim, K, use_kg
         N, A_ui, parts = build_ckg_parts(ds, use_kg)
