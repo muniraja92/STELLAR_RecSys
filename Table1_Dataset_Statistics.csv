@@ -1,8 +1,0 @@
-Metric,Value
-Users,2082
-Items,3105
-Interactions (Train),202546
-Interactions (Test),2082
-Avg. Interactions/User,97.28
-Avg. Interactions/Item,65.23
-Sparsity (%),96.87
