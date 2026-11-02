@@ -1,6 +1,6 @@
 # STELLAR-KG
 
-Code and results for *STELLAR-KG: Spectral Graph Wavelets on Collaborative Knowledge Graphs with Temporal Positional Reasoning for Sequential Recommendation* (P. Muniraja and S. M. Satapathy, revised manuscript submitted to *Knowledge and Information Systems*).
+Code and results for *STELLAR-KG: Knowledge-Graph Spectral Filters and Graph Item Tokens for Sequential Recommendation, with a Controlled and Stratified Evaluation* (P. Muniraja and S. M. Satapathy, revised manuscript submitted to *Knowledge and Information Systems*).
 
 The repository contains the complete pipeline of the revised study on MovieLens-1M: data preparation and knowledge-graph construction, STELLAR-KG (KG-SGW, TPR with PCL and CIR, and the HGF fusion gate) with all ablation variants, the ten baselines, the tuning and multi-seed driver, the statistical and stratified analyses and the scripts that produce every table and figure.
 
@@ -47,4 +47,4 @@ MovieLens-1M is distributed by GroupLens (https://grouplens.org/datasets/moviele
 
 ## Files from the first submission
 
-The notebook `STELLAR_KG.ipynb` and the `Figure*.pdf` files at the top level belong to the first version of the manuscript and are kept for the record only. That version was affected by the problems described in the response to the reviewers (test-target leakage, an unused knowledge graph, a single-hop approximation of the wavelet operator); none of its results are used in the revised paper. Everything in `src/`, `paper_scripts/` and `results/` belongs to the revised study.
+The notebook, figures and tables of the first version of the manuscript were removed from the current version of the repository; they remain in its commit history. That version was affected by the problems described in the response to the reviewers (test-target leakage, an unused knowledge graph, a single-hop approximation of the spectral operator), and none of its results are used in the revised paper.
