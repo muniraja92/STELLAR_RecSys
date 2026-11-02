@@ -16,6 +16,8 @@ The repository contains the complete pipeline of the revised study on MovieLens-
 | `src/fusion.py` | Hierarchical gated fusion (zero-initialised gate fitted on validation targets) |
 | `src/run.py` | Runs one model, configuration and seed |
 | `src/gdriver.py` | Dependency-aware scheduler: validation grid, configuration selection, seeds 42, 1 and 7 |
+| `src/run_token_controls.sh` | Token-source controls: TPR with tokens from KG-SGW without knowledge edges and from LightGCN (Table 4, Fig. 4c) |
+| `src/check_lightgcn_equivalence.sh` | Implementation check: KG-SGW with the LightGCN response reproduces LightGCN |
 | `src/export_peruser.py` | Collects per-user test metrics of all MovieLens-1M runs into `results/strat/ml1m_peruser.npz` |
 | `src/stratify.py` | Stratified analysis: per-stratum paired tests, stratified signed-rank tests, Cochran's Q, balanced-population estimates, stratified-bootstrap ranking stability, knowledge-stratum adjustment |
 | `src/report.py` | Aggregates runs; paired Wilcoxon tests with Holm correction, bootstrap intervals, effect sizes, group analyses, learned-parameter diagnostics |
@@ -31,7 +33,7 @@ pip install -r requirements.txt
 cd src
 python prep_data.py                          # downloads raw data into ../raw and writes ../data/*.pkl
 python gdriver.py 8 ml1m 42,1,7             # tunes, selects and runs all models (8 parallel jobs)
-python report.py ml1m                        # writes ../results/tables
+bash run_token_controls.sh                   # token-source controls, then report.py ml1m (writes ../results/tables)
 python export_peruser.py && python stratify.py   # stratified analysis; needs MovieLens-1M users.dat
 cd ../paper_scripts
 python make_tables.py && python fig_results.py && python fig_kernels.py
